@@ -70,10 +70,6 @@ void InsertarCalificacion(std::map<std::string, double>& lista) {
   do {
     std::cout << "\nAhora indique la nota numerica: ";
     std::cin >> nota;
-    if (!isdigit(nota)) {
-      std::cout << "Error: introduzca una nota numérica\n";
-      exit(EXIT_FAILURE);
-    }
   } while (nota < 0.0 || nota > 10.0);
     lista[alumno] = nota;
 }
