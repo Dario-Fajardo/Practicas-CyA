@@ -25,5 +25,5 @@ programa: $(files)
 ######################################
 clean:
 	@echo "cleaning up the directory..."
-	@rm -rf *.o *gch *.out programa
+	@rm -rf *.o *gch *.out programa calificaciones_multiples
 ######################################
