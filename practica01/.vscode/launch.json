@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/holamundo",
+            "program": "${workspaceFolder}/calificacion_multiple/calificaciones_multiples",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

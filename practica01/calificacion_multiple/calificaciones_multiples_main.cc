@@ -11,25 +11,12 @@
  *        muestra todas ellas para cada uno, además, en ejecución, permite hacer
  *        cambios en estas notas.
  */
+#include "calificaciones_multiples.h"
 
-#include<map>
-#include <string>
-#include <set>
-
-class Lista {
- public:
-  // Constructores
-  Lista();
-  Lista(std::string nombre_archivo);
-  // Getters
-  std::multimap<std::string, double> GetLista() const { return alumnos_; }
-  // Otros métodos
-  void ImprimirLista();
-  void InsertarCalificacion();
- private:
-  std::set<std::string> identificadores_;
-  std::multimap<std::string, double> alumnos_;
-};
-
-void Usage(int agrc, char *argv[]);
-void Menu(Lista& lista_de_alumnos);
+int main(int argc, char *argv[]) {
+  Usage(argc, argv);
+  Lista lista_de_alumnos{argv[1]};
+  while (true) {
+    Menu(lista_de_alumnos);
+  }
+}
