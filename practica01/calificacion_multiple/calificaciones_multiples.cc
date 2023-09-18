@@ -44,7 +44,7 @@ Lista::Lista(std::string nombre_archivo) {
 void Lista::ImprimirLista() {
   for (const auto& id_actual : identificadores_) {
     std::cout << id_actual << " : ";
-    for (const std::pair<std::string, double> alumno_actual : alumnos_) {
+    for (const std::pair<std::string, double>& alumno_actual : alumnos_) {
         if (alumno_actual.first == id_actual) {
           std::cout << alumno_actual.second << " ";
         }
