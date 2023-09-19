@@ -13,6 +13,12 @@
  */
 #include "calificaciones_multiples.h"
 
+/**
+ * Función principal (main) del programa
+ * 
+ * @param argc: contador de parametros pasados al programa
+ * @param argv: vector con todos los parametros en forma de string
+ */
 int main(int argc, char *argv[]) {
   Usage(argc, argv);
   Lista lista_de_alumnos{argv[1]};

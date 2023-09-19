@@ -5,7 +5,7 @@
 # Práctica 1: Contenedores Asociativos
 #
 # @author Dario Fajardo alu0101564630@ull.edu.es
-# @date 16 Sept 2023
+# @date 17 Sept 2023
 # @brief Makefile del proyecto, permite compilar facilmente y hacer make clean
 #		 para borrar los binarios de la carpeta después
 

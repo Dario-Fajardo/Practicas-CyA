@@ -68,7 +68,7 @@ void InsertarCalificacion(std::map<std::string, double>& lista) {
     std::cin >> alumno;
   double nota;
   do {
-    std::cout << "\nAhora indique la nota numerica: ";
+    std::cout << "\nAhora indique la nota numérica: ";
     std::cin >> nota;
   } while (nota < 0.0 || nota > 10.0);
     lista[alumno] = nota;

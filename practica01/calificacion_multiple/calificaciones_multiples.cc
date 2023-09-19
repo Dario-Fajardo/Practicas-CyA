@@ -16,10 +16,19 @@
 #include <fstream>
 #include <iostream>
 
+/**
+ * Constructor por defecto de la clase Lista
+ */
 Lista::Lista() {
   alumnos_ = {};
 }
 
+/**
+ * Constructor de la clase Lista que utiliza un archivo para obtener datos
+ * 
+ * @param nombre_archivo: una string con el nombre del archivo desde el cual se
+ *                        leerán los datos
+ */
 Lista::Lista(std::string nombre_archivo) {
   const char kEspacio{' '};
   std::ifstream fichero{nombre_archivo, std::ios_base::in};
@@ -41,6 +50,9 @@ Lista::Lista(std::string nombre_archivo) {
   }
 }
 
+/**
+ * Método de la clase Lista que permite imprimirla por pantalla
+ */
 void Lista::ImprimirLista() {
   for (const auto& id_actual : identificadores_) {
     std::cout << id_actual << " : ";
@@ -53,6 +65,10 @@ void Lista::ImprimirLista() {
   }
 }
 
+/**
+ * Método de la clase lista que permite modificar una instancia de esta
+ * añadiendo una calificación y/o alumnos nuevos a ella
+ */
 void Lista::InsertarCalificacion() {
   std::cout << "Indique el alumno al que le va a dar una nota: ";
   std::string alumno;
@@ -69,6 +85,11 @@ void Lista::InsertarCalificacion() {
   }
 }
 
+/**
+ * Función que implementa el menú de la aplicación para facilitar su uso
+ * 
+ * @param lista_de_alumnos: un objeto Lista sobre el que el programa trabajará
+ */
 void Menu(Lista& lista_de_alumnos){
   int opcion;
   system("clear");
@@ -89,10 +110,18 @@ void Menu(Lista& lista_de_alumnos){
   }
 }
 
+/**
+ * Función que explica el funcionamiento del programa al usiario, además,
+ * implementa el uso de --help como parámetro al ejecutar la aplicación para
+ * obtener ayuda
+ * 
+ * @param argc: contador de parámetros de entrada al programa
+ * @param argv: vector donde se encuentran los parámetros del programa
+ */
 void Usage(int argc, char* argv[]) {
   if (argc != 2) {
-    std::cout << "Modo de empleo: ./calificacion_unica archivo.txt\n";
-    std::cout << "Pruebe: ./calificacion_unica --help para más información\n";
+    std::cout << "Modo de empleo: ./calificaciones_multiples archivo.txt\n";
+    std::cout << "Pruebe: ./calificaciones_multiples --help para más información\n";
     exit(EXIT_SUCCESS);
   } 
   
