@@ -1,0 +1,6 @@
+{&, a, apollasdegoma, asdegoma, degoma, egoma, goma, holapollasdegoma, lapollasdegoma, lasdegoma, llasdegoma, ma, olapollasdegoma, ollasdegoma, oma, pollasdegoma, sdegoma}
+{&, adiosnose, diosnose, e, iosnose, nose, ose, osnose, se, snose}
+{&, ab, abbab, b, bab, bbab}
+{&, a, hola, la, ola}
+{&, 123456, 23456, 3456, 456, 56, 6}
+{&}
