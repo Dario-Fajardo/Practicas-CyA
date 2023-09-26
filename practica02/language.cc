@@ -13,18 +13,34 @@
  */
 #include "language.h"
 
+/**
+ * Constructor por defecto por si se crea un objeto sin indicar ningún valor
+ */
 Language::Language() {
   language_strings_ = {};
 }
 
+/**
+ * Se construye el lenguaje a partir de un std::set de cadenas
+ */
 Language::Language(const std::set<std::string>& language_strings) {
   language_strings_ = language_strings;
 }
 
+/**
+ * Método para editar un lenguaje sin tener acceso a sus atributos
+ */
 void Language::Insert(const std::string& new_string) {
   language_strings_.insert(new_string);
 }
 
+/**
+ * Se imprime el lenguaje como un conjunto cualquiera, entre {} y con sus
+ * elementos separados por coma y espacio
+ * 
+ * @param output: la salida por la que se imprimirá
+ * @param alphabet: el lenguaje a imprimir
+ */
 std::ostream& operator<<(std::ostream& output, const Language& language) {
   int iterator{1};
   output << "{";

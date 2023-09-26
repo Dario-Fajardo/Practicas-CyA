@@ -15,10 +15,20 @@
 #include "alphabet.h"
 #include <string>
 
+/**
+ * Constructor por defecto por si se crea un objeto sin indicar ningún valor
+ */
 Alphabet::Alphabet() {
   alphabet_symbols_ = {};
 }
 
+/**
+ * Constructor parametrizado, usado posteriormente para obtener el conjunto de
+ * símbolos de una cadena
+ * 
+ * @param string_symbols: un std::string obtenido de un objeto String para poder
+ *                        construir su alfabeto
+ */
 Alphabet::Alphabet(const std::string& string_symbols) {
   if (string_symbols != "&") {
     for (const auto& symbol : string_symbols) {
@@ -29,10 +39,22 @@ Alphabet::Alphabet(const std::string& string_symbols) {
   }
 }
 
+/**
+ * Usada para editar los alfabetos sin tener acceso a sus atributos
+ * 
+ * @param symbol: el símbolo que se va a incluir en este alfabeto
+ */
 void Alphabet::Include(char symbol) {
   alphabet_symbols_.insert(symbol);
 }
 
+/**
+ * Se imprime el alfabeto como un conjunto cualquiera, entre {} y con sus
+ * elementos separados por coma y espacio
+ * 
+ * @param output: la salida por la que se imprimirá
+ * @param alphabet: el alfabeto a imprimir
+ */
 std::ostream& operator<<(std::ostream& output, const Alphabet& alphabet) {
   int iterator{1};
   output << "{";

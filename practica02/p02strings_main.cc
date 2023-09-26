@@ -15,6 +15,15 @@
 #include "tools.h"
 #include <fstream>
 
+/**
+ * Se obtienen como argumento un archivo de entrada, otro de salida y un opcode
+ * en el primero hay una serie de cadenas, de estas se obtendrá cierta 
+ * información que será escrita en el archivo de salida, el opcode le indica
+ * al programa que información es la que escribir
+ * 
+ * @param argc: número de argumentos del programa
+ * @param argv: todos los parámetros introducidos por línea de comandos
+ */
 int main(int argc, char *argv[]) {
   Usage(argc, argv);
   std::string input_file_name{argv[1]};

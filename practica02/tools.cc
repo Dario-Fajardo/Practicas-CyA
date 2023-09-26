@@ -27,12 +27,12 @@ void Usage(int argc, char* argv[]) {
       std::string parameter{argv[1]};
       if (parameter == "--help" || parameter == "-h") {
         std::cout << "\nEste programa recibe por parámetro un archivo de entrada y\n";
-        std::cout << " uno de salida, en el primero debe de haber una serie de \n";
+        std::cout << "uno de salida, en el primero debe de haber una serie de\n";
         std::cout << "cadenas separadas por un retorno de carro, en el de salida se\n";
-        std::cout << " guardará cierta información sobre estas cadenas, para ello\n";
-        std::cout << " el programa ha de ejecutarse con un tercer parámetro que \n";
+        std::cout << "guardará cierta información sobre estas cadenas, para ello\n";
+        std::cout << "el programa ha de ejecutarse con un tercer parámetro que\n";
         std::cout << "será el opcode:\n1) Alfabeto\n2) Longitud\n3) Inversas\n4) ";
-        std::cout << "prefijos\n5) Sufijos\n\n Este opcode le dirá al programa que";
+        std::cout << "prefijos\n5) Sufijos\n\nEste opcode le dirá al programa que";
         std::cout << " información guardar en el archivo de salida.\n\nFormato del";
         std::cout << " archivo de entrada:\n\nabbab\n6793836\nhola\n\n";
         exit(EXIT_SUCCESS);

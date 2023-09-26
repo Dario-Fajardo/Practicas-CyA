@@ -14,11 +14,21 @@
 #include "string.h"
 #include <algorithm>
 
+/**
+ * Constructor por defecto por si se crea un objeto sin indicar ningún valor
+ */
 String::String() {
   symbols_ = {};
   alphabet_symbols_ = {};
 }
 
+/**
+ * Se construye la cadena a partir de un std::string que contiene los símbolos
+ * de la ya nombrada, se comprueba que no es la cadena vacía y se añaden todos 
+ * sus símbolos también al atributo que representa su alfabeto.
+ * 
+ * @param symbols: std::string con todos los símbolos de la cadena
+ */
 String::String(const std::string& symbols) {
   symbols_ = symbols;
   for (const auto& symbol : symbols) {
@@ -28,6 +38,13 @@ String::String(const std::string& symbols) {
   }
 }
 
+/**
+ * Se obtiene la longitud de la cadena a partir del método size() de la clase
+ * std::string usada para implementar la clase String de este programa
+ * 
+ * @return el tamaño de la cadena, si es & se retorna un 0 ya que es la cadena
+ *         vacía
+ */
 int String::Length() const {
   if (symbols_ != "&") {
     return symbols_.size();
@@ -36,6 +53,11 @@ int String::Length() const {
   }
 }
 
+/**
+ * Se invierte la cadena usando el método std::reverse() de algorithm
+ * 
+ * @return un objeto de la clase String que se trata de la cadena invertida
+ */
 String String::Reverse() {
   String reverse_string;
   reverse_string.symbols_ = symbols_;
@@ -44,6 +66,13 @@ String String::Reverse() {
   return reverse_string;
 }
 
+/**
+ * Se crea un lenguaje con los prefijos incluyendo la cadena vacía (obviamente)
+ * Estos se van añadiendo uno a uno añadiendo cada vez un símbolo más
+ * 
+ * @return un lenguaje implementado con la clase Lenguage que contiene todas las
+ *         cadenas que sean prefijo
+ */
 Language String::Prefixes() {
   Language prefixes;
   String empty_string{"&"};
@@ -56,6 +85,12 @@ Language String::Prefixes() {
   return prefixes;
 }
 
+/**
+ * Se utiliza el mismo concepto que para el método Prefixes(), sin embargo aquí
+ * hacemos uso del método Reverse() para obtener los sufijos
+ * 
+ * @return Un lenguaje con todos los sufijos de la cadena 
+ */
 Language String::Sufixes() {
   Language sufixes;
   String empty_string{"&"};
@@ -69,10 +104,26 @@ Language String::Sufixes() {
   return sufixes;
 }
 
+/**
+ * Sobrecarga del operador < por si es necesario comparar la longitud de dos
+ * cadenas
+ * 
+ * @param string: la cadena con la que se quiere comparar
+ * @return un valor booleano dependiente de si la primera cadena es mas corta
+ *         o más larga que la otra
+ */
 bool String::operator<(const String& string) const {
   return (Length() < string.Length() ? true : false); 
 }
 
+/**
+ * Se imprime la cadena mostrando cada símbolo por la salida en el orden 
+ * correspondiente
+ * 
+ * @param output: por donde saldrá dicha información
+ * @param string: la cadena a enviar por la salida
+ * @return el output con la cadena ya recorrida
+ */
 std::ostream& operator<<(std::ostream& output, const String& string) {
   for (const auto& symbol : string.symbols_) {
     output << symbol;
