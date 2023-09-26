@@ -31,7 +31,6 @@ int main(int argc, char *argv[]) {
   std::string output_file_name{argv[2]};
   std::ofstream output_file{output_file_name, std::ios_base::out};
   std::string entry_line;
-  std::cout << atoi(argv[3]) << std::endl;
   while(getline(input_file, entry_line)) {
     switch (atoi(argv[3])) {
       case 1: {
