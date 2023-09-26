@@ -17,6 +17,8 @@
 #define LANGUAGE_H
 
 #include <set>
+#include <vector>
+#include <algorithm>
 #include "string.h"
 
 class Language {

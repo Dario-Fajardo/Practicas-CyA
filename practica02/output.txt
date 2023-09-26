@@ -1,4 +1,4 @@
-{&, ab, abbab, b, bab, bbab}
-{&, a, hola, la, ola}
-{&, 123456, 23456, 3456, 456, 56, 6}
+{&, a, ab, abb, abba, abbab}
+{&, h, ho, hol, hola}
+{&, 1, 12, 123, 1234, 12345, 123456}
 {&}

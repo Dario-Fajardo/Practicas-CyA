@@ -35,16 +35,22 @@ void Language::Insert(const std::string& new_string) {
 }
 
 /**
- * Se imprime el lenguaje como un conjunto cualquiera, entre {} y con sus
- * elementos separados por coma y espacio
+ * Se imprime el alfabeto como un conjunto cualquiera, entre {} y con sus
+ * elementos separados por coma y espacio. Se utiliza un vector y el método sort
+ * para imprimirlos por orden de longitud
  * 
  * @param output: la salida por la que se imprimirá
- * @param alphabet: el lenguaje a imprimir
+ * @param alphabet: el alfabeto a imprimir
  */
 std::ostream& operator<<(std::ostream& output, const Language& language) {
-  int iterator{1};
-  output << "{";
+  std::vector<String> strings;
   for (const String& actual_string : language.GetLanguageStrings()) {
+    strings.emplace_back(actual_string);
+  }
+  std::sort(std::begin(strings), std::end(strings));
+  output << "{";
+  int iterator{1};
+  for (const String& actual_string : strings) {
     output << actual_string;
     if (iterator != language.GetLanguageStrings().size()) {
       output << ", ";
