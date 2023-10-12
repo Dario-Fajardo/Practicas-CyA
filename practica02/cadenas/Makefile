@@ -25,5 +25,5 @@ programa: $(files)
 ######################################
 clean:
 	@echo "cleaning up the directory..."
-	@rm -rf *.o *gch *.out programa p02_cadenas
+	@rm -rf *.o *gch *.out p02_cadenas
 ######################################
