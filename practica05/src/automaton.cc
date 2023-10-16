@@ -13,6 +13,10 @@
 
 #include "../include/automaton.h"
 
+ /**
+  * Constructor por defecto de la clase autómata, asigna valores vacíos por
+  * si se llama al constructor sin parámetros 
+  */
 Automaton::Automaton() {
   automaton_alphabet_ = {};
   automaton_states_ = {};
@@ -20,6 +24,13 @@ Automaton::Automaton() {
   final_states_ = {}; 
 }
 
+/**
+ * Se utiliza este constructor por si se intenta instaciar un autómata usando un
+ * archivo de texto (cosa que se hace en este programa)
+ * 
+ * @param file_name: un std::string con el nombre del archivo del que se leerá
+ *                   toda la información del autómata
+ */
 Automaton::Automaton(const std::string& file_name) {
   std::ifstream file{file_name, std::ios_base::in};
   std::string line{};
@@ -86,6 +97,20 @@ Automaton::Automaton(const std::string& file_name) {
     } 
   }
 }
+
+/**
+ * Método que nos permite evaluar una cadena usando el autómata para ver si 
+ * pertenece al lenguaje que este reconoce. Utiliza varios conjuntos de estados 
+ * y la funcion Transition() para iterar sobre ellos y acabar consiguiendo los 
+ * estados finales que se alcancan mediante dicha cadena
+ * 
+ * @param user_string: la cadena del alfabeto del autómata que ha introducido
+ *                     el usuario mediante un archivo de texto
+ * 
+ * @return los estados en los que termina el autómata tras itroducir la cadena
+ *         este conjunto nos servirá para verificar posteriormente si alguno
+ *         de ellos es un estado de aceptación usando la función Accept()
+ */
 std::set<State> Automaton::Evaluate(const String& user_string) {
   std::set<State> iteration_states{initial_state_};
   for (const auto& current_symbol : user_string.GetSymbols()) {
@@ -99,6 +124,17 @@ std::set<State> Automaton::Evaluate(const String& user_string) {
   return iteration_states;
 }
 
+/**
+ * Método clave para el funcionamiento de Evaluate, ya que permite saber a que
+ * estados se transiciona con cierto símbolo.
+ * 
+ * @param symbol: símbolo con el que se realizará la transición al siguiente
+ *                conjunto de estados
+ * @param current: estado en el que nos encontramos y el cual tiene la 
+ *                 información necesaria para completar la transición
+ * 
+ * @return un conjunto de estados al que se llega tras la transición
+ */
 std::set<State> Automaton::Transition(const char& symbol, const State& current) {
   std::set<State> next_states;
   for (const std::pair<char, int> transition : current.GetTransitions()) {
@@ -113,6 +149,16 @@ std::set<State> Automaton::Transition(const char& symbol, const State& current) 
   return next_states;
 }
 
+/**
+ * Sencillo método que simplemente verifica que un conjunto de estados contiene
+ * al menos uno de aceptación, necesario para completar el proceso de aceptación
+ * de una cadena. Se recorren ambos conjuntos en busca de la existencia de alguno
+ * en el conjunto de estados finales
+ * 
+ * @param evaluation_states: estados finales devueltos por la función Evaluate()
+ * 
+ * @return true si la cadena es aceptada, false si no
+ */
 bool Automaton::Accept(const std::set<State>& evaluation_states) {
   for (const State& current_state : evaluation_states) {
     if (final_states_.find(current_state) != final_states_.end()) {

@@ -13,6 +13,16 @@
 
 #include "../include/automaton.h"
 
+/**
+ * Función main del programa. Creamos un autómata y probamos si acepta diversas
+ * cadenas introducidas por un archivo de texto, luego esta información es 
+ * mostrada en pantalla
+ * 
+ * @param argc: contador de argumentos pasados por línea de comandos
+ * @param argv: valores de los argumentos
+ * 
+ * @return 0 si el funcionamiento del programa ha sido correcto
+ */
 int main(int argc, char *argv[]) {
   Usage(argc, argv);
   std::string automaton_file_name{argv[1]};

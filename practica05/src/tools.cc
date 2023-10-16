@@ -13,6 +13,15 @@
 
 #include "../include/tools.h"
 
+/**
+ * Función que comprueba los parámetros de entrada del main para saber si se
+ * han introducido correctamente, además permite incluir una función --help
+ * que le dará al usuario información detallada del uso de la aplicación al 
+ * usuario
+ * 
+ * @param argc: número de parámetros pasados al programa
+ * @param argv: todos los valores introducidos por línea de comandos
+ */
 void Usage(int argc, char *argv[]) {
   if (argc != 3) {
     if (argc == 2) {
@@ -43,7 +52,14 @@ void Usage(int argc, char *argv[]) {
   } 
 }
 
-
+/**
+  * Permite buscar un caracter dentro de un std::string
+  * 
+  * @param string: la cadena en la que se va a buscar
+  * @param character: el caracter a encontrar
+  * 
+  * @return true si se encuentra, false si no
+  */
 bool Contains(std::string string, char character) {
   for (const auto& actual_character : string) {
     if (actual_character == character) {

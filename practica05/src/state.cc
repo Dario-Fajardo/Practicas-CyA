@@ -13,6 +13,10 @@
 
 #include "../include/state.h"
 
+/**
+ * Constructor por defecto de la clase State por si se intenta instanciar sin 
+ * pasar parámetros
+ */
 State::State() {
   transition_number_ = 0;
   transitions_ = {};
@@ -20,6 +24,14 @@ State::State() {
   id_ = 0;
 }
 
+/**
+ * Constructor de la clase State a partir de una línea de texto, cada línea del
+ * archivo que el usuario pasa al programa representa un estado, simplemente
+ * se utiliza esta para construirlo
+ * 
+ * @param text_line: línea de texto que contiene toda la información para crear
+ *                   un estado de un autómata
+ */
 State::State(const std::string& text_line) {
   id_ = int(text_line[0]) - 48;
   is_final_ = text_line[2] == '1' ? true : false;
@@ -33,10 +45,27 @@ State::State(const std::string& text_line) {
   }
 }
 
+/**
+ * Operador utilizado para que al crear conjuntos se puedan ordenar de menor a 
+ * mayor según el número identificador
+ * 
+ * @param state: el estado con el que se va a comparar
+ */
 bool State::operator<(const State& state) const {
   return id_ < state.id_;
 }
 
+/**
+ * Función no perteneciente a la clase utilizada en el método Evaluate de la 
+ * clase Automaton, esta permite unir dos estados en uno solo (tal y como hace
+ * la unión matemática de conjuntos) ya que se necesita en la función que
+ * define un autómata
+ * 
+ * @param first_set, second_set: ambos conjuntos serán iterados y se insertarán
+ *                               sus elementos en otro
+ * 
+ * @return un conjunto de estado resultado de la unión de los otros dos
+ */
 std::set<State> StateSetUnion(std::set<State> first_set, 
 std::set<State> second_set) {
   std::set<State> final_set;
