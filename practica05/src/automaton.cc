@@ -77,6 +77,12 @@ Automaton::Automaton(const std::string& file_name) {
     }
     ++line_counter;
   }
+  // for (const State& a : automaton_states_) {
+  //   std::cout << a.GetId() << std::endl;
+  //   for (std::pair<char, int> transition : a.GetTransitions()) {
+  //     std::cout << transition.first << "-" << transition.second;
+  //   }
+  // }
   if (line_counter < 0 || line_counter > states_number_) {
     std::cout << "Error: El número de líneas que definen estados en el archivo de ";
     std::cout << "entrada ha de ser igual al número de estados que tiene el ";
@@ -90,11 +96,11 @@ Automaton::Automaton(const std::string& file_name) {
         correct_transitions = true;
       }
     }
-    if (correct_transitions == false) {
-      std::cout << "Error: Todas las transiciones han de ser con estados que ";
-      std::cout << "pertenezcan al autómata\n";
-      exit(EXIT_FAILURE);
-    } 
+    // if (correct_transitions == false) {
+    //   std::cout << "Error: Todas las transiciones han de ser con estados que ";
+    //   std::cout << "pertenezcan al autómata\n";
+    //   exit(EXIT_FAILURE);
+    // } 
   }
 }
 
@@ -138,7 +144,7 @@ std::set<State> Automaton::Evaluate(const String& user_string) {
 std::set<State> Automaton::Transition(const char& symbol, const State& current) {
   std::set<State> next_states;
   for (const std::pair<char, int> transition : current.GetTransitions()) {
-    if (transition.first == symbol) {
+    if (transition.first == symbol || transition.first == '&') {
       for (const State& next_state : automaton_states_) {
         if (next_state.GetId() == transition.second) {
           next_states.insert(next_state);
