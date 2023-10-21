@@ -124,6 +124,8 @@ std::set<State> Automaton::Evaluate(const String& user_string) {
     for (const State& current_iteration_state : iteration_states) {
       auxiliar_state_saving_set = StateSetUnion(auxiliar_state_saving_set, 
                                   Transition(current_symbol, current_iteration_state));
+      auxiliar_state_saving_set = StateSetUnion(auxiliar_state_saving_set, 
+                                                E_Clausure(current_iteration_state));
     }
     iteration_states = auxiliar_state_saving_set;
   }
@@ -172,4 +174,19 @@ bool Automaton::Accept(const std::set<State>& evaluation_states) {
     }
   }
   return false;
+}
+
+std::set<State> Automaton::E_Clausure(const State& current) {
+  std::set<State> e_clausure;
+  e_clausure.insert(current);
+  for (const std::pair<char, int>& transition : current.GetTransitions()) {
+    if (transition.first == '&') {
+      for (const State& transition_state : automaton_states_) {
+        if (transition_state.GetId() == transition.second) {
+          e_clausure.insert(transition_state);
+        }
+      }
+    }
+  }  
+  return e_clausure;
 }

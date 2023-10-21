@@ -36,6 +36,7 @@ class Automaton {
   // Otros métodos
   std::set<State> Evaluate(const String& user_string);
   std::set<State> Transition(const char& symbol, const State& current);
+  std::set<State> E_Clausure(const State& current);
   bool Accept(const std::set<State>& evaluation_states);
  private:
   Alphabet automaton_alphabet_;
