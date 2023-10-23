@@ -17,6 +17,10 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include "state.h"
+
+typedef std::vector<std::set<State>> DfaStatesVector;
 
 void Usage(int argc, char *argv[]);
 bool Contains(std::string string, char character);

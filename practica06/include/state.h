@@ -26,12 +26,17 @@ class State {
   State();
   State(const std::string& text_line);
   // Getters
-  int GetTransitionNumber() { return transition_number_; }
+  int GetTransitionNumber() const { return transition_number_; }
+  void SetTransitionNumber(int transition_number) { transition_number_ = transition_number; }
   std::multimap<char, int> GetTransitions() const { return transitions_; }
-  bool GetIsFinal() { return is_final_; }
+  void SetTransitions(std::multimap<char, int> transitions) { transitions_ = transitions; }
+  bool GetIsFinal() const { return is_final_; }
+  void SetIsFinal(bool is_final) { is_final_ = is_final; }
   int GetId() const { return id_; }
+  void SetId(int id) { id_ = id; };
   // Otros métodos
   bool operator<(const State& state) const;
+  bool operator==(const State& state) const;
  private:
   int transition_number_;
   std::multimap<char, int> transitions_;

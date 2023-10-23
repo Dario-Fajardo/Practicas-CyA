@@ -55,6 +55,11 @@ bool State::operator<(const State& state) const {
   return id_ < state.id_;
 }
 
+bool State::operator==(const State& state) const {
+  return id_ == state.id_;
+}
+
+
 /**
  * Función no perteneciente a la clase utilizada en el método Evaluate de la 
  * clase Automaton, esta permite unir dos estados en uno solo (tal y como hace

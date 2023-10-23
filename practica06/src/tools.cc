@@ -46,8 +46,8 @@ void Usage(int argc, char *argv[]) {
         exit(EXIT_SUCCESS);
       }
     }
-    std::cout << "Modo de empleo: ./p05_simulador_af automata.af cadenas.txt\n";
-    std::cout << "Pruebe: ./p05_simulador_af --help para más información\n";
+    std::cout << "Modo de empleo: ./p06_const_sub entrada.nfa salida.dfa\n";
+    std::cout << "Pruebe: ./p06_const_sub --help para más información\n";
     exit(EXIT_FAILURE);
   } 
 }
@@ -63,6 +63,16 @@ void Usage(int argc, char *argv[]) {
 bool Contains(std::string string, char character) {
   for (const auto& actual_character : string) {
     if (actual_character == character) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool DoesVectorContain(const DfaStatesVector& dfa_states, 
+const std::set<State>& key) {
+  for (const std::set<State>& current_set : dfa_states) {
+    if (key == current_set) {
       return true;
     }
   }
