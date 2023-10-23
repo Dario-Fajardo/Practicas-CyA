@@ -6,7 +6,7 @@
  * Práctica 5: Contenedores Asociativos
  *
  * @author Dario Fajardo alu0101564630@ull.edu.es
- * @date 13 Oct 2023
+ * @date 23 Oct 2023
  * @brief En este archivo se define la clase Automata, usada para simular
  *        el comportamiento de estos en el programa principal.
  */
@@ -106,6 +106,18 @@ Automaton::Automaton(const std::string& file_name) {
   }
 }
 
+/**
+ * Constructor de la clase autómata para el método que SubsetConstruction(), se
+ * utiliza para crear un DFA usando la información obtenida en la función antes
+ * nombrada, solo sirve para construir DFA.
+ * 
+ * @param transition: una tabla de transiciones
+ * @param states: map que contiene la equivalencia entre un conjunto de estados
+ *                del nfa usado en SubsetConstruction() y una id que será la del
+ *                estado que defina dicho conjunto
+ * @param initial_state: id del estado inicial
+ * @param final_states: id's de los estados finales del autómata
+ */
 Automaton::Automaton(DfaTable transitions, DfaState states, int initial_state, 
 std::set<int> final_states, Alphabet dfa_alphabet) {
   automaton_alphabet_ = dfa_alphabet;
@@ -264,6 +276,14 @@ bool Automaton::Accept(const std::set<State>& evaluation_states) {
   return false;
 }
 
+/**
+ * Método que implementa el algoritmo de construcción de subconjuntos, usado
+ * para crear un DFA a partir de un NFA
+ * 
+ * @return un DFA construido a partir de una tabla de transiciones y una tabla
+ *         de equivalencias entre cierto conjunto de estados y su id como nuevo
+ *         estado
+*/
 Automaton Automaton::SubsetConstruction() {
   DfaTable tran_dfa;
   DfaStatePair initial_pair{EClausure(initial_state_), 0};
@@ -334,14 +354,15 @@ Automaton Automaton::SubsetConstruction() {
       }
     }
   }
-  for (const DfaStatePair& a : dfa_states) {
-    printstateset(a.first);
-    std::cout << a.second << std::endl << std::endl;
-  }
   Automaton dfa{tran_dfa, dfa_states, initial_state, final_states, dfa_alphabet};
   return dfa;
 }
 
+/**
+ * Lee los datos de un autómata y los imprime en un archivo
+ * 
+ * @param output_file: archivo en el que se imprimirá la información del autómata
+*/
 void Automaton::PrintInFile(std::ofstream& output_file) {
   // Alfabeto
   for (const auto& symbol : automaton_alphabet_.GetAlphabetSymbols()) {

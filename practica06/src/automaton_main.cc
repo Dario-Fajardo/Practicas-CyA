@@ -6,9 +6,9 @@
  * Práctica 5: Contenedores Asociativos
  *
  * @author Dario Fajardo alu0101564630@ull.edu.es
- * @date 13 Oct 2023
- * @brief Este es el archivo main de la aplicación, implementa el funcionamiento
- *        principal del simulador de autómatas finitos
+ * @date 23 Oct 2023
+ * @brief Este es el archivo main de la aplicación, implementa la conversión de
+ *        NFA a DFA usando el método SubsetConstruction() de la clase Automaton
  */
 
 #include "../include/automaton.h"
@@ -24,7 +24,7 @@
  * @return 0 si el funcionamiento del programa ha sido correcto
  */
 int main(int argc, char *argv[]) {
-  // Usage(argc, argv);
+  Usage(argc, argv);
   std::string nfa_file_name{argv[1]};
   Automaton nfa{nfa_file_name};
   Automaton dfa{nfa.SubsetConstruction()};

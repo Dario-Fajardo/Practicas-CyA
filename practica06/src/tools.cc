@@ -27,22 +27,28 @@ void Usage(int argc, char *argv[]) {
     if (argc == 2) {
       std::string parameter{argv[1]};
       if (parameter == "--help" || parameter == "-h") {
-        std::cout << "Este programa sirve para simular un autómata finito, para\n";
-        std::cout << "ello, recibe 2 parámetros por línea de comandos, el\n";
-        std::cout << "primero un archivo de texto que define un autómata, su\n";
-        std::cout << "primera línea ha de tener los símbolos del alfabeto\n";
-        std::cout << "separados por espacio, la siguiente el número de estados\n";
-        std::cout << "luego, cuál es el estado de arranque del autómata\n";
-        std::cout << "después de esas líneas el archivo tendrá una línea\n";
-        std::cout << "para cada estado, incluyendo, su número identificador,\n";
-        std::cout << "si se trata de un estado de acpetación o no,\n";
-        std::cout << "su número de transiciones y por último por cada una de\n";
-        std::cout << "estas, el símbolo y el estado destino\n\nEl archivo debería";
-        std::cout << "tener un formato similar al siguiente:\n\n";
+        std::cout << "Este programa sirve para convertir un NFA en un DFA \n";
+        std::cout << "usando el algoritmo de construcción de subconjuntos,\n";
+        std::cout << "para ello el programa necesita que se introduzca un \n";
+        std::cout << "primer archivo que defina el NFA y el nombre de un \n";
+        std::cout << "segundo archivo en el que se introducirá la información\n";
+        std::cout << "en el mismo formato que necesita el archivo de entrada.\n";
+        std::cout << "Dicho formato se define a continuación:\n\n";
+        std::cout << "Línea 1: Símbolos del alfabeto separados por espacios.\n";
+        std::cout << "Línea 2: Número total de estados del autómata\n";
+        std::cout << "Línea 3: Estado de arranque del autómata\n";
+        std::cout << "Después de estás se define una línea para cada estado:\n";
+        std::cout << "   - ID del estado\n";
+        std::cout << "   - 1 si es de aceptación 0 si no\n";
+        std::cout << "   - Número de transiciones del estado\n";
+        std::cout << "   Por último, en la misma línea, se definen las ";
+        std::cout << " transiciones del estado de la siguiente manera\n";
+        std::cout << "      - Símbolo de la transición (&) si es una épsilon-";
+        std::cout << "transición\n";
+        std::cout << "      - Estado destino de dicha transición\n\n";
+        std::cout << "Teniendo todo eso en cuenta, el archivo deberia tener un";
+        std::cout << " formato similar al siguiente:\n\n";
         std::cout << "0 1\n3\n0\n0 0 2 0 2 1 1\n1 1 2 0 1 1 1\n2 0 2 0 1 1 3\n";
-        std::cout << "\nEl segundo ha de contener las cadenas que se van a \n";
-        std::cout << "comprobar separadas por un retorno de carro tal que así\n";
-        std::cout << "\n10011011\n11111\n0101101\n111\n&\n\n";
         exit(EXIT_SUCCESS);
       }
     }
@@ -63,16 +69,6 @@ void Usage(int argc, char *argv[]) {
 bool Contains(std::string string, char character) {
   for (const auto& actual_character : string) {
     if (actual_character == character) {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool DoesVectorContain(const DfaStatesVector& dfa_states, 
-const std::set<State>& key) {
-  for (const std::set<State>& current_set : dfa_states) {
-    if (key == current_set) {
       return true;
     }
   }
