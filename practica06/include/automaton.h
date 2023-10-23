@@ -3,7 +3,7 @@
  * Escuela Superior de Ingeniería y Tecnología
  * 2º Curso en Grado en Ingeniería Informática
  * Computabilidad y Algoritmia
- * Práctica 5: Contenedores Asociativos
+ * Práctica 6: Algoritmo de construcción de subconjuntos
  *
  * @author Dario Fajardo alu0101564630@ull.edu.es
  * @date 13 Oct 2023
@@ -58,13 +58,5 @@ class Automaton {
   std::set<State> final_states_;
   NfaTable transition_table_;
 };
-
-inline void printstateset(const std::set<State>& set) {
-  std::cout << "{";
-  for (const State& a : set) {
-    std::cout << a.GetId() << " ";
-  }
-  std::cout << "}\n";
-}
 
 #endif
