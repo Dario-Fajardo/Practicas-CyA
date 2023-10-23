@@ -10,7 +10,7 @@
 #		 para borrar los binarios de la carpeta después
 
 CXX = g++
-CXXFLAGS = -std=c++17
+CXXFLAGS = -std=c++17 -v -Wall
 ######################################
 files = src/*cc
 ######################################
@@ -18,7 +18,7 @@ all: programa
 
 programa: $(files)
 	@echo "======================================================"
-	@echo "compiling..."
+	@echo "chambeando..."
 	@echo "======================================================"
 	@$(CXX) $(CXXFLAGS) -o p06_const_sub $(files)
 
