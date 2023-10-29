@@ -44,5 +44,3 @@ class Grammar {
   char starting_symbol_;
   ProductionSet productions_;
 };
-
-bool IsTerminal(const char symbol);

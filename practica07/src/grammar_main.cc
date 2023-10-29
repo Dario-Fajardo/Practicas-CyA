@@ -14,12 +14,26 @@
  */
 
 #include "../include/grammar.h"
+#include "../include/tools.h"
 #include <iostream>
 
+/**
+ * Función principal del programa, lee por línea de comandos dos nombres de 
+ * archivo y crea una gramática a partir del primero, esta gramática es 
+ * convertida a forma normal de Chomsky gracias al método ChomskyNormalForm()
+ * de la clase Grammar y se imprime en el segundo archivo
+ * 
+ * @param argc: cuenta el número de parámetros introducidos por línea de comandos
+ *              si no son suficientes o son demasiados el programa fallará
+ * @param argv: un vector con todos los parámetros, de aquí se obtiene lo que
+ *              el usuario pase por línea de comandos
+ * 
+ * @return un 0 si todo funciona correctamente
+ */
 int main(int argc, char *argv[]) {
+  Usage(argc, argv);
   std::string input_file_name{argv[1]};
   Grammar initial_grammar{input_file_name};
-  std::cout << "initial grammar:\n" << initial_grammar << "==================\n";
   Grammar normalized_grammar{initial_grammar.ChomskyNormalForm()};
   std::string output_file_name{argv[2]};
   std::ofstream output_file{output_file_name, std::ios_base::out};

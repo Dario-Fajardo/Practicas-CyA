@@ -117,6 +117,14 @@ bool String::operator<(const String& string) const {
   return (Length() < string.Length() ? true : false); 
 }
 
+/**
+ * Comprueba que existe un symbolo concreto en el atributo symbols_ de la clase
+ * Srting
+ * 
+ * @param symbol: el símbolo a buscar
+ * 
+ * @return true si existe, false si no 
+ */
 bool String::Exists(const char symbol) const {
   for (const auto& current_symbol : symbols_) {
     if (current_symbol == symbol) {
@@ -126,6 +134,18 @@ bool String::Exists(const char symbol) const {
   return false;
 }
 
+/**
+ * Reemplaza en una cadena todas las ocurrencias de un símbolo por otro, usado
+ * en la conversión a forma normal de Chomsky para el primer bucle del
+ * algoritmo
+ * 
+ * @param symbol: el símbolo en el que se van a convertir todas las ocurrencias
+ *                del otro, en el caso de la CNF, el símbolo no terminal
+ * @param symbol_to_replace el símbolo que se va a buscar para reemplazarlo, en
+ *                          el caso dde la CNF el símbolo terminal
+ * 
+ * @return la nueva cadena con los símbolos sustituidos
+ */
 String String::Replace(const char symbol, const char symbol_to_replace) const {
   std::string new_symbols{symbols_};
   for (int i{0}; i < symbols_.length(); ++i) {

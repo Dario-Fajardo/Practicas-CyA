@@ -13,6 +13,10 @@
 
 #include "../include/grammar.h"
 
+/**
+ * Constructor por defecto de la clase Grammar, no tiene parámetros y crea el
+ * objeto completamente vacío
+ */
 Grammar::Grammar() {
   grammar_alphabet_ = {};
   non_terminal_symbols_ = {};
@@ -20,6 +24,12 @@ Grammar::Grammar() {
   productions_ = {};
 }
 
+/**
+ * Constructor de la clase Grammar a partir del nombre de un archivo, este se
+ * lee y se interpreta para construir el objeto
+ * 
+ * @param file_name: el nombre de dicho archivo de texto 
+ */
 Grammar::Grammar(const std::string& file_name) {
   std::ifstream file{file_name, std::ios_base::in};
   std::string line;
@@ -64,6 +74,14 @@ Grammar::Grammar(const std::string& file_name) {
   }
 }
 
+/**
+ * Constructor de copia de la clase Grammar, usado en el algoritmo de conversión
+ * a CNF
+ * 
+ * @param original_grammar: la gramática de origen, en el algoritmo de la CNF
+ *                          se usa para crear la nueva gramática a partir de la
+ *                          introducida por un archivo
+ */
 Grammar::Grammar(const Grammar& original_grammar) {
   grammar_alphabet_ = original_grammar.grammar_alphabet_;
   starting_symbol_ = original_grammar.starting_symbol_;
@@ -105,6 +123,14 @@ std::ostream& operator<<(std::ostream& output, const Grammar& grammar) {
   return output;
 }
 
+/**
+ * Algoritmo de conversión a forma normal de Chomsky, tiene comentarios con cada
+ * paso seguido desde el pseudocódigo, esta clase se usa para pasar a CNF la
+ * gramática que se obtiene en el programa principal a partir de un archivo de
+ * texto que el usuario pasa por línea de comandos
+ * 
+ * @return una gramática nueva que se encuentra en CNF
+ */
 Grammar Grammar::ChomskyNormalForm() const {
   Grammar normalized_grammar{*this};
   normalized_grammar.productions_.clear();
@@ -118,7 +144,6 @@ Grammar Grammar::ChomskyNormalForm() const {
       for (const auto current_symbol : current_production.second.GetSymbols()) {
         // if (Xi = a ∈ Σ) then
         if (grammar_alphabet_.GetAlphabetSymbols().count(current_symbol)) {
-          std::cout << current_symbol << std::endl;
           // Add the production Ca → a;
           Production new_terminal_production;
           new_terminal_production.first = normalized_grammar.BiggestNonTerminal() + 1;
@@ -152,7 +177,6 @@ Grammar Grammar::ChomskyNormalForm() const {
   // end for
   }
   normalized_grammar.productions_ = first_step_productions;
-  std::cout << "After first step:\n" << normalized_grammar << "===============\n";
   // for all (A → B1B2 . . . Bm (con m ≥ 3, Bi ∈ V ) do
   ProductionSet final_normalized_productions{normalized_grammar.productions_};
   for (const Production& current_production : normalized_grammar.productions_) {
@@ -201,6 +225,12 @@ Grammar Grammar::ChomskyNormalForm() const {
   return normalized_grammar;
 }
 
+/**
+ * Sencillo método de la clase Grammar que busca cuál es el último símbolo no
+ * terminal del conjunto de estos usada para cuando se necesite crear uno nuevo
+ * 
+ * @return dicho símbolo no terminal
+ */
 char Grammar::BiggestNonTerminal() const {
   char biggest_non_terminal;
   for (const auto& current_symbol : non_terminal_symbols_ ) {
@@ -209,6 +239,12 @@ char Grammar::BiggestNonTerminal() const {
   return biggest_non_terminal;
 }
 
+/**
+ * Sencillo método que comprueba que existe una producción en una gramática que
+ * da como resultado lo mismo que otra, usada en el algoritmo de conversión a
+ * CNF para saber si no se está creando una producción del tipo D --> a innecesaria
+ * puesto ya se habia creado en una iteración anterior
+ */
 bool Grammar::NormalizedProductionExists(const Production& production) const {
   for (const Production& current_production : productions_) {
     if (current_production.second.GetSymbols() == production.second.GetSymbols()) {
@@ -216,8 +252,4 @@ bool Grammar::NormalizedProductionExists(const Production& production) const {
     }
   }
   return false;
-}
-
-bool IsTerminal(const char symbol) {
-  return std::isupper(symbol) ? true : false;
 }
