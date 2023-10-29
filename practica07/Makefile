@@ -10,7 +10,7 @@
 #		 para borrar los binarios de la carpeta después
 
 CXX = g++
-CXXFLAGS = -std=c++17 -v -Wall
+CXXFLAGS = -std=c++17
 ######################################
 files = src/*cc
 ######################################
