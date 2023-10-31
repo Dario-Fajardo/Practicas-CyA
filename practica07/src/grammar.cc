@@ -133,6 +133,7 @@ std::ostream& operator<<(std::ostream& output, const Grammar& grammar) {
  */
 Grammar Grammar::ChomskyNormalForm() const {
   Grammar normalized_grammar{*this};
+  std::cout << "Antes del primer bucle:\n" << normalized_grammar << "================\n";
   normalized_grammar.productions_.clear();
   ProductionSet first_step_productions;
   // for all (A → X1X2 . . . Xn (con n ≥ 2, Xi ∈ (Σ ∪ V )) do
@@ -167,6 +168,9 @@ Grammar Grammar::ChomskyNormalForm() const {
           converted_production.second = converted_production.second.
           Replace(non_terminal, current_symbol);
         // end if
+        } else {
+          converted_production.first = current_production.first;
+          converted_production.second = converted_production.second;
         }
       // end for
       }
@@ -177,6 +181,7 @@ Grammar Grammar::ChomskyNormalForm() const {
   // end for
   }
   normalized_grammar.productions_ = first_step_productions;
+  std::cout << "Primer bucle: \n" << normalized_grammar << "===================\n";
   // for all (A → B1B2 . . . Bm (con m ≥ 3, Bi ∈ V ) do
   ProductionSet final_normalized_productions{normalized_grammar.productions_};
   for (const Production& current_production : normalized_grammar.productions_) {
