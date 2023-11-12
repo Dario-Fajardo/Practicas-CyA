@@ -7,9 +7,7 @@
  *
  * @author Dario Fajardo alu0101564630@ull.edu.es
  * @date 22 Sept 2023
- * @brief Este programa es capaz de recibir por parámetros en nombre de un
- *        archivo y de el obtener una serie de cadenas de las cuales se podrá
- *        obtener información como su alfabeto, longitud, etc.
+ * @brief Este archivo implementa la clase Alphabet
  */
 #pragma once
 
