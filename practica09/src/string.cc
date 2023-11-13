@@ -183,6 +183,10 @@ void String::InsertSymbol(char symbol) {
 /**
  * Sobrecarga del operador [] para acceder a un símbolo concreto de la cadena
  * implementada por la clase String
+ * 
+ * @param position: la posición del símbolo
+ * 
+ * @return el caracter en dicha posición
  */
 char& String::operator[](int position) {
   return symbols_[position];

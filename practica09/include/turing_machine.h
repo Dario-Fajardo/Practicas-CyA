@@ -50,6 +50,7 @@ class TuringMachine {
   // Otros métodos
   TransitionSecond ComputationStep(const TransitionFirst& state_and_symbol) const;
   bool Compute(const String& tape_string) const;
+  void PrintComputationStep(String& tape, int current_state, int position) const;
   friend std::ostream& operator<<(std::ostream& output, const TuringMachine& machine);
   String CreateTape(const String& tape_string) const;
  private:

@@ -38,27 +38,48 @@ TuringMachine::TuringMachine(const std::string& file_name) {
   std::ifstream file{file_name, std::ios_base::in};
   // Primera línea que contiene el número de estados
   getline(file, line);
+  if (line.find(' ') != std::string::npos) { // Comprobamos el formato
+    std::cout << "[ERROR]: No puede haber más de un número de estados\n";
+    exit(EXIT_FAILURE);
+  }
   states_number_ = stoi(line);
   // Segunda línea que indica el estado de arranque
   getline(file, line);
+  if (line.find(' ') != std::string::npos) { // Comprobamos el formato
+    std::cout << "[ERROR]: No puede haber más de un estado de arranque\n";
+    exit(EXIT_FAILURE);
+  }
   initial_state_ = stoi(line);
   // Tercera línea que indica los id's de los estados de aceptación
   getline(file, line);
   std::string current_number{""};
   // Recorremos toda la línea para obtener los estados de aceptación
   for (int i{0}; i < line.length(); i = i + 2) {
+    if (!std::isdigit(line[i])) {
+      std::cout << "[ERROR]: los estados solo pueden ser nombrados con números\n";
+      exit(EXIT_FAILURE);
+    }
     final_states_.insert(static_cast<int>(line[i]) - 48);
   }
   // Línea 4 obtenemos el número de tuplas que componen la máquina
   getline(file, line);
+  if (line.find(' ') != std::string::npos) { // Comprobamos el formato
+    std::cout << "[ERROR]: No puede haber más de un número de tuplas\n";
+    exit(EXIT_FAILURE);
+  }
   int transitions{stoi(line)};
   // En el resto de líneas obtenemos las tuplas de las transiciones
   int line_counter{0};
   std::set<int> existing_states; // Estados que ya han sido creados
   while(getline(file, line)) {
+    if (line.size() != 9) { // Comprobamos el formato de las tuplas
+      std::cout << "[ERROR]: Formato de las tuplas incorrecto\n";
+      exit(EXIT_FAILURE);
+    }
     // Se lee la transición y la incluimos en las transiciones de la máquina
     TransitionFirst first{std::make_pair(int(line[0]) - 48, line[2])}; 
-    TransitionSecond second{std::make_tuple(line[4], Movement (line[6]), int(line[8]) - 48)};
+    TransitionSecond second{std::make_tuple(line[4], Movement (line[6]), 
+    int(line[8]) - 48)};
     transition_table_.insert(std::make_pair(first, second));
     // Creamos estados y los incluímos en la máquina
     if (!existing_states.count(first.first)) {
@@ -98,6 +119,18 @@ std::ostream& operator<<(std::ostream& output, const TuringMachine& machine) {
   return output;
 }
 
+/**
+ * Este método de la clase TuringMachine se ocupa de realizar los pasos de
+ * computo, es decir, al pasarle un símbolo y un estado, devolverá
+ * una tripleta con un símbolo para escribir, un movimiento y un estado al que
+ * se transicionara
+ * 
+ * @param state_and_symbol: estado y símbolo que se le pasan al método
+ * 
+ * @return una tripleta con un símbolo para escribir en la cinta de la máquina,
+ *         un movimiento y un estado, estas equivalencias se obtienen del
+ *         atributo transition_table_ de la clase TuringMachine
+ */
 TransitionSecond TuringMachine::ComputationStep(const TransitionFirst& 
 state_and_symbol) const {
   TransitionSecond tuple;
@@ -109,6 +142,14 @@ state_and_symbol) const {
   return tuple;
 }
 
+/**
+ * Esta función coge una cadena de entrada y simula ser la cinta de la máquina
+ * de Turing
+ * 
+ * @param tape_string: cadena de entrada para la cinta
+ * 
+ * @return una cadena con símbolos blancos que simula ser la cinta
+ */
 String TuringMachine::CreateTape(const String& tape_string) const {
   String tape{"$"};
   for (const auto& current_symbol : tape_string.GetSymbols()) {
@@ -118,31 +159,76 @@ String TuringMachine::CreateTape(const String& tape_string) const {
   return tape;
 }
 
+/**
+ * Método que computa una cadena con una máquina de Turing de la clase
+ * TuringMachine, se itera comprobando las transiciones de la máquina e imprimimos
+ * cada paso de cómputo con el método PrintComputationStep()
+ * 
+ * @param tape_string: la cadena a computar, importante recalcar de que esto
+ *                     no se trata de la cinta de la máquina, esta se va a
+ *                     insertar dentro de otra cadena que simulará la cinta
+ * 
+ * @return true si se acepta, false si no
+ */
 bool TuringMachine::Compute(const String& tape_string) const {
   bool stopped{false}; // Booleano que comprueba que la máquina no ha parado
   String tape = CreateTape(tape_string); // Cinta de la máquina
   char current_char{tape.GetSymbols()[1]}; // Carácter actual
   int current_state{initial_state_};
   int position{1}; // Posición inicial de la cabeza de lectura/escritura
+  PrintComputationStep(tape, current_state, position); // Imprimimos situación inicial
+
   while (!stopped) {
     if (transition_table_.count(std::make_pair(current_state, current_char))) {
+      // Si la transición existe
       TransitionSecond next_tuple{ComputationStep(std::make_pair(current_state, 
       current_char))};
       tape[position] = std::get<0>(next_tuple); // Símbolo a escribir
-      if (std::get<1>(next_tuple) == Movement::L) {
-        --position;
-      } else if (std::get<1>(next_tuple) == Movement::R) {
-        ++position;
+
+      // Comprobamos el movimiento a realizar por la cabeza de lectura/escritura
+      if (char(std::get<1>(next_tuple)) == 'L') {
+        if (position != 0) { // Simulamos que los símbolos blancos son infinitos
+          --position; // Posición a la izquierda
+        }
+      } else if (char(std::get<1>(next_tuple)) == 'R') {
+        if (position != tape.Length()) {
+          ++position; // Posición a la derecha
+        }
       }
-      current_state = std::get<2>(next_tuple);
-      current_char = tape[position];
+
+      current_state = std::get<2>(next_tuple); // Siguiente estado
+      PrintComputationStep(tape, current_state, position); // Imprimimos el paso
+      current_char = tape[position]; // Siguiente símbolo
     } else {
-      stopped = true;
+      stopped = true; // Se para la máquina
     }
   }
-  std::cout << tape << std::endl;
+  // Comprobamos si la cadena se rechaza o se acepta y retornamos el valor
   if (final_states_.count(current_state)) {
     return true;
   }
   return false; 
+}
+
+/**
+ * Usada para imprimir los pasos de cómputo que vaya realizando el método
+ * Compute(), el formato de la impresión simula el de la cinta de una máquina de
+ * Turing, con símbolos blancos a sus lados, y en la posición de la cabeza de
+ * lectura escritura encontramos información sobre el estado actual de la máquina
+ * 
+ * @param tape: cinta de la máquina
+ * @param current_state: estado actual para imprimirlo
+ * @param position: información sobre la posición en la que esta la cabeza de 
+ *                  lectura/escritura de la máquina
+ */
+void TuringMachine::PrintComputationStep(String& tape, int current_state, 
+int position) const {
+  for (int i{0}; i < position ; ++i) { // Imprimos hasta la posicion del estado
+    std::cout << tape[i];
+  }
+  std::cout << " q" << current_state << " "; // Imprimimos el estado
+  for (int i{position}; i < tape.Length(); ++i) { // Terminamos de imprimir
+    std::cout << tape[i];
+  }
+  std::cout << std::endl;
 }
