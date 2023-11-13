@@ -18,8 +18,8 @@
  */
 TuringMachine::TuringMachine() {
   machine_states_ = {};
-  tape_alphabet_ = {};
-  input_alphabet_ = {};
+  // tape_alphabet_ = {};
+  // input_alphabet_ = {};
   initial_state_ = 0;
   states_number_ = 0;
   final_states_ = {};
@@ -84,25 +84,65 @@ TuringMachine::TuringMachine(const std::string& file_name) {
  * @return la salida modificada con la información
  */
 std::ostream& operator<<(std::ostream& output, const TuringMachine& machine) {
-  output << "Número de estados: " << machine.states_number_ << std::endl;
-  output << "Estado inicial: " << machine.initial_state_ << std::endl;
-  output << "Final states: { ";
+  output << machine.states_number_ << std::endl;
+  output << machine.initial_state_ << std::endl;
   for (const auto& state_id : machine.final_states_) { // Imprmir estados
     output << state_id << " ";
   }
-  output << "}" << std::endl;
-  output << "Estados de la máquina: { ";
-  for (const State& current_state : machine.machine_states_) {
-    std::cout << current_state.GetId() << " ";
-  }
-  std::cout << "}" << std::endl;
-  output << "Número de tuplas de la máquina: " << machine.transition_table_.size();
-  output << std::endl; 
+  output << std::endl << machine.transition_table_.size() << std::endl;
   for (const Transition& transition : machine.transition_table_) {
-    output << "(" << transition.first.first << ", " << transition.first.second;
-    output << ") ---> (" << std::get<0>(transition.second) << ", ";
-    output << char(std::get<1>(transition.second)) << ", ";
-    output << std::get<2>(transition.second) << ")" << std::endl;
+    output << transition.first.first << transition.first.second;
+    output << std::get<0>(transition.second) << char(std::get<1>(transition.second));
+    output << std::get<2>(transition.second) << std::endl;
   }
   return output;
+}
+
+TransitionSecond TuringMachine::ComputationStep(const TransitionFirst& 
+state_and_symbol) const {
+  TransitionSecond tuple;
+  for (const Transition& transition_pair : transition_table_) {
+    if (state_and_symbol == transition_pair.first) {
+      tuple = transition_pair.second;
+    }
+  }
+  return tuple;
+}
+
+String TuringMachine::CreateTape(const String& tape_string) const {
+  String tape{"$"};
+  for (const auto& current_symbol : tape_string.GetSymbols()) {
+    tape.InsertSymbol(current_symbol);
+  }
+  tape.InsertSymbol('$');
+  return tape;
+}
+
+bool TuringMachine::Compute(const String& tape_string) const {
+  bool stopped{false}; // Booleano que comprueba que la máquina no ha parado
+  String tape = CreateTape(tape_string); // Cinta de la máquina
+  char current_char{tape.GetSymbols()[1]}; // Carácter actual
+  int current_state{initial_state_};
+  int position{1}; // Posición inicial de la cabeza de lectura/escritura
+  while (!stopped) {
+    if (transition_table_.count(std::make_pair(current_state, current_char))) {
+      TransitionSecond next_tuple{ComputationStep(std::make_pair(current_state, 
+      current_char))};
+      tape[position] = std::get<0>(next_tuple); // Símbolo a escribir
+      if (std::get<1>(next_tuple) == Movement::L) {
+        --position;
+      } else if (std::get<1>(next_tuple) == Movement::R) {
+        ++position;
+      }
+      current_state = std::get<2>(next_tuple);
+      current_char = tape[position];
+    } else {
+      stopped = true;
+    }
+  }
+  std::cout << tape << std::endl;
+  if (final_states_.count(current_state)) {
+    return true;
+  }
+  return false; 
 }

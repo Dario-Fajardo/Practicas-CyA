@@ -171,3 +171,19 @@ std::ostream& operator<<(std::ostream& output, const String& string) {
   }
   return output;
 }
+
+/**
+ * Este método nos permite añadir un símbolo a la cadena por el final
+ */
+void String::InsertSymbol(char symbol) {
+  symbols_.push_back(symbol);
+  alphabet_symbols_.Include(symbol);
+}
+
+/**
+ * Sobrecarga del operador [] para acceder a un símbolo concreto de la cadena
+ * implementada por la clase String
+ */
+char& String::operator[](int position) {
+  return symbols_[position];
+}

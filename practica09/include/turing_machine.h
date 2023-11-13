@@ -42,19 +42,20 @@ class TuringMachine {
   TuringMachine(const std::string& file_name);
   // Getters
   StateSet GetMachineStates() { return machine_states_; }
-  Alphabet GetTapeAlphabet() { return tape_alphabet_; }
-  Alphabet GetInputAlphabet() { return input_alphabet_; }
+  // Alphabet GetTapeAlphabet() { return tape_alphabet_; }
+  // Alphabet GetInputAlphabet() { return input_alphabet_; }
   int GetInitial() { return initial_state_; }
   std::set<int> GetFinalStates() { return final_states_; }
   Table GetTransitions() { return transition_table_; }
   // Otros métodos
-  TransitionSecond Transition(const TransitionFirst& state_and_symbol) const;
-  String Evaluate(const String& original_string) const;
+  TransitionSecond ComputationStep(const TransitionFirst& state_and_symbol) const;
+  bool Compute(const String& tape_string) const;
   friend std::ostream& operator<<(std::ostream& output, const TuringMachine& machine);
+  String CreateTape(const String& tape_string) const;
  private:
   StateSet machine_states_;
-  Alphabet tape_alphabet_;
-  Alphabet input_alphabet_;
+  // Alphabet tape_alphabet_;
+  // Alphabet input_alphabet_;
   int initial_state_;
   int states_number_;
   std::set<int> final_states_;

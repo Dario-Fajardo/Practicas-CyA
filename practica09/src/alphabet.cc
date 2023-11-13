@@ -40,6 +40,16 @@ Alphabet::Alphabet(const std::string& string_symbols) {
 }
 
 /**
+ * Constructor de copia de la clase Alphabet, usado para copiar los alfabetos
+ * de cadenas
+ * 
+ * @param copy_alphabet: alfabeto del cual se va a copiar 
+ */
+Alphabet::Alphabet(const Alphabet& copy_alphabet) {
+  alphabet_symbols_ = copy_alphabet.alphabet_symbols_;
+}
+
+/**
  * Usada para editar los alfabetos sin tener acceso a sus atributos
  * 
  * @param symbol: el símbolo que se va a incluir en este alfabeto
@@ -67,4 +77,14 @@ std::ostream& operator<<(std::ostream& output, const Alphabet& alphabet) {
   }
   output << "}";
   return output;
+}
+
+/**
+ * Método que sobrecarga el operador = para asignar un nuevo conjunto de símbolos
+ * al alfabeto
+ * 
+ * @param alphabet: alfabeto del que se obtendrá el nuevo conjunto
+ */
+void Alphabet::operator=(const Alphabet& alphabet) {
+  alphabet_symbols_ = alphabet.GetAlphabetSymbols();
 }

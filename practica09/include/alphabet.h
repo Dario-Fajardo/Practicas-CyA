@@ -23,10 +23,13 @@ class Alphabet {
   // Constructores
   Alphabet();
   Alphabet(const std::string& string_symbols);
+  Alphabet(const Alphabet& copy_alphabet);
   // Otros métodos
   void Include(char symbol);
   std::set<char> GetAlphabetSymbols() const { return alphabet_symbols_; }
   friend std::ostream& operator<<(std::ostream& output, const Alphabet& alphabet);
+  // Operadores
+  void operator=(const Alphabet& alphabet);
  private:
   std::set<char> alphabet_symbols_;
 };

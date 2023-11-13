@@ -41,7 +41,8 @@ class String {
   Language Prefixes();
   Language Sufixes();
   friend std::ostream& operator<<(std::ostream& output, const String& string);
-
+  char& operator[](int position);
+  void InsertSymbol(char symbol);
  private:
   std::string symbols_;
   Alphabet alphabet_symbols_;
