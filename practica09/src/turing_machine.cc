@@ -56,6 +56,11 @@ TuringMachine::TuringMachine(const std::string& file_name) {
   initial_state_ = stoi(line);
   // Tercera línea que indica los id's de los estados de aceptación
   getline(file, line);
+  if (line.find(' ') != std::string::npos) { // Comprobamos el formato
+    std::cout << "[ERROR]: No puede haber más de un número de estados de ";
+    std::cout << "aceptación\n";
+    exit(EXIT_FAILURE);
+  }
   std::string current_number{""};
   // Recorremos toda la línea para obtener los estados de aceptación
   for (int i{0}; i < line.length(); i = i + 2) {
@@ -81,7 +86,13 @@ TuringMachine::TuringMachine(const std::string& file_name) {
       exit(EXIT_FAILURE);
     }
     // Se lee la transición y la incluimos en las transiciones de la máquina
-    TransitionFirst first{std::make_pair(int(line[0]) - 48, line[2])}; 
+    TransitionFirst first{std::make_pair(int(line[0]) - 48, line[2])};
+     // Comprobamos transiciones salientes de estados finales
+    if (final_states_.count(first.first)) {
+      std::cout << "[ERROR]: No se admiten transiciones salientes desde";
+      std::cout << "estados de aceptación\n";
+      exit(EXIT_FAILURE);
+    }
     TransitionSecond second{std::make_tuple(line[4], Movement (line[6]), 
     int(line[8]) - 48)};
     transition_table_.insert(std::make_pair(first, second));

@@ -45,11 +45,12 @@ class TuringMachine {
   int GetInitial() { return initial_state_; }
   std::set<int> GetFinalStates() { return final_states_; }
   Table GetTransitions() { return transition_table_; }
+  // Operadores
+  friend std::ostream& operator<<(std::ostream& output, const TuringMachine& machine);
   // Otros métodos
   TransitionSecond ComputationStep(const TransitionFirst& state_and_symbol) const;
   bool Compute(const String& tape_string) const;
   void PrintComputationStep(String& tape, int current_state, int position) const;
-  friend std::ostream& operator<<(std::ostream& output, const TuringMachine& machine);
   String CreateTape(const String& tape_string) const;
  private:
   StateSet machine_states_;
