@@ -36,6 +36,10 @@ TuringMachine::TuringMachine(const std::string& file_name) {
   std::string line;
   // Obtenemos el archivo
   std::ifstream file{file_name, std::ios_base::in};
+  if (!file.good()) { // Comprobamos que el archivo se ha leído sin errores
+    std::cout << "[ERROR]: no se puede acceder al archivo, compruebe que exista\n";
+    exit(EXIT_FAILURE);
+  }
   // Primera línea que contiene el número de estados
   getline(file, line);
   if (line.find(' ') != std::string::npos) { // Comprobamos el formato
@@ -177,8 +181,11 @@ bool TuringMachine::Compute(const String& tape_string) const {
   int current_state{initial_state_};
   int position{1}; // Posición inicial de la cabeza de lectura/escritura
   PrintComputationStep(tape, current_state, position); // Imprimimos situación inicial
-
+  int iteration_counter{0};
   while (!stopped) {
+    if (iteration_counter > 100) {
+      return false;
+    }
     if (transition_table_.count(std::make_pair(current_state, current_char))) {
       // Si la transición existe
       TransitionSecond next_tuple{ComputationStep(std::make_pair(current_state, 
@@ -202,6 +209,7 @@ bool TuringMachine::Compute(const String& tape_string) const {
     } else {
       stopped = true; // Se para la máquina
     }
+    ++iteration_counter;
   }
   // Comprobamos si la cadena se rechaza o se acepta y retornamos el valor
   if (final_states_.count(current_state)) {

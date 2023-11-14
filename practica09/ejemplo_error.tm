@@ -6,7 +6,7 @@
 0 $ $ S 3
 0 Y Y R 4
 1 a a R 1
-1 Y Y R 1
+1 Y Y R 1 3
 1 b Y L 2
 2 Y Y L 2
 2 a a L 2
