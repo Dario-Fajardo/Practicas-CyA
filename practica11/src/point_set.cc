@@ -21,12 +21,7 @@ namespace emst {
 
   void PointSet::EMST(void) {
     emst::arch_vector archs;
-    ComputeArchVector_(archs); // Vector con todos los arcos
-    
-    for (const auto &a : archs) {
-      std::cout << a.first << a.second;
-    }
-    
+    ComputeArchVector_(archs); // Vector con todos los arcos 
     forest forest; 
     for (const emst::point& point : *this) { // Creamos un sub-árbol por cada punto
       SubTree sub_tree;
@@ -34,15 +29,6 @@ namespace emst {
       forest.emplace_back(sub_tree);
     }
     int i{0};
-
-    for (const auto& sub_tree : forest) {
-      std::cout << "subtree: " << i << std::endl;
-      for (const auto& a : sub_tree.GetPoints()) {
-        std::cout << a << std::endl;
-      }
-      ++i;
-    }
-
     for (const emst::weighted_arch& arch : archs) { // Recorremos el vector con los arcos y fusionamos los que se puedan conectar
       int i{0}, j{0};
       FindIncidentSubTrees_(forest, arch.second, i, j);
@@ -78,14 +64,11 @@ namespace emst {
 
   void PointSet::FindIncidentSubTrees_(const emst::forest& sub_tree, const emst::arch &arch, int& i, int& j) const {
     for (int k{0}; k < sub_tree.size(); ++k) { // Recorremos los sub-árboles del bosque
-      std::cout << "k: " << k << std::endl;
       if (sub_tree[k].Contains(arch.first)) { // Si el k-ésimo árbol contiene el arco, i es igual a k
         i = k;
-        std::cout << "i: " << i << std::endl;
       }
       if (sub_tree[k].Contains(arch.second)) { // Si el k-ésimo árbol contiene el arco, j es igual a k
         j = k;
-        std::cout << "j: " << j << std::endl;
       }
     }
   }
