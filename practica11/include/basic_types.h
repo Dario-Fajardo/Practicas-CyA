@@ -34,5 +34,6 @@ namespace emst {
 
 std::ostream& operator<<(std::ostream& output, const emst::point& point);
 std::ostream& operator<<(std::ostream& output, const emst::arch& arch);
+bool operator==(const emst::point& point_a, const emst::point& point_b);
 
 #endif

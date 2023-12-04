@@ -23,3 +23,10 @@ std::ostream& operator<<(std::ostream& output, const emst::arch& arch) {
   output << arch.first << "----" << arch.second << "\n";
   return output;
 }
+
+bool operator==(const emst::point& point_a, const emst::point& point_b) {
+  if (point_a.first == point_b.first && point_a.second == point_b.second) {
+    return true;
+  } 
+  return false;
+}

@@ -12,11 +12,22 @@
 */
 
 #include <iostream>
+#include <fstream>
+#include <map>
 #include "../include/basic_types.h"
 #include "../include/point_set.h"
 #include "../include/sub_tree.h" 
+#include "../include/tools.h"
 
 int main(int argc, char* argv[]) {
+  Usage(argc, argv);
+  bool dot{false};
+  if (argc == 2) {
+    std::string parameter{argv[1]};
+    if (parameter == "-d") {
+      dot = true;
+    }
+  }
   emst::point_vector points;
   std::cout << "Introduzca los puntos escribiendo ambas componentes por cada uno, cuando termine escriba \n";
   while (true) {
@@ -33,8 +44,29 @@ int main(int argc, char* argv[]) {
   }
   emst::PointSet point_set{points};
   point_set.EMST();
-  for (const emst::arch& current_arch : point_set.GetTree()) {
-    std::cout << current_arch.first << "---" << current_arch.second << "\n";
+  if (dot) {
+    std::ofstream file{"out.dot"};
+    std::map<emst::point, char> point_naming;
+    file << "graph {\n";
+    char point_id{'a'};
+    for (const auto& point : point_set.GetPoints()) {
+      point_naming.insert(std::make_pair(point, point_id));
+      file << "  " << point_id << "[pos=\"" << point.first << "," << point.second << "!\"]\n";
+      point_id++;
+    }
+    for (const auto& naming : point_naming) {
+      char origin{naming.second};
+      for (const auto& arch : point_set.GetTree()) {
+        if (arch.first == naming.first) {
+          file << "  " << naming.second << "--" << point_naming[arch.second] << "\n";
+        }
+      }
+    }
+    file << "}";
+  } else {
+    for (const emst::arch& current_arch : point_set.GetTree()) {
+      std::cout << current_arch.first << "---" << current_arch.second << "\n";
+    }
   }
   return 0;
 }
