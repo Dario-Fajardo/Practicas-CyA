@@ -13,15 +13,26 @@
 #include <utility>
 #include <vector>
 #include <set>
+#include <iostream>
+#include <iomanip>
+
+#ifndef BASIC_TYPES_H
+#define BASIC_TYPES_H
+
+#define MAX_SZ 3
+#define MAX_PREC 1
 
 namespace emst {
   typedef std::pair<double, double> point;
   typedef std::vector<point> point_vector;
   typedef std::pair<point, point> arch;
-  typedef std::pair<double, point> weighted_arch;
+  typedef std::pair<double, arch> weighted_arch;
   typedef std::vector<weighted_arch> arch_vector;
   typedef std::set<point> point_collection;
   typedef std::vector<arch> tree;
 }
 
-// Definir operadores << y >> para estos tipos según vayan haciendo falta
+std::ostream& operator<<(std::ostream& output, const emst::point& point);
+std::ostream& operator<<(std::ostream& output, const emst::arch& arch);
+
+#endif

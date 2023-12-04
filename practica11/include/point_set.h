@@ -10,6 +10,11 @@
 * @brief En este archivo encontramos la declaración de la clase PointSet
 */
 #include "sub_tree.h"
+#include <algorithm>
+#include <cmath>
+
+#ifndef POINT_SET_H
+#define POINT_SET_H
 
 namespace emst {
   class PointSet : public emst::point_vector {
@@ -31,3 +36,5 @@ namespace emst {
     double EuclideanDistance_(const emst::arch& arch) const;
   };
 }
+
+#endif

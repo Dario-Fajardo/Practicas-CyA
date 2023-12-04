@@ -11,6 +11,9 @@
 */
 #include "basic_types.h"
 
+#ifndef SUB_TREE_H
+#define SUB_TREE_H
+
 namespace emst {
   class SubTree {
    public:
@@ -33,3 +36,5 @@ namespace emst {
 
   typedef std::vector<SubTree> forest;
 }
+
+#endif
