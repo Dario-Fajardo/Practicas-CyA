@@ -19,10 +19,11 @@ namespace emst {
    * 
    * @param points: vector con los puntos 
    */
-  PointSet::PointSet(const emst::point_vector& points) {
+  PointSet::PointSet(const emst::point_vector& points, const double& minimum_distance) {
     for (const point& current_point : points) {
       (*this).emplace_back(current_point);
     }
+    minimum_distance_ = minimum_distance;
   }
 
   /**
@@ -42,14 +43,17 @@ namespace emst {
       forest.emplace_back(sub_tree);
     }
     int i{0};
+    double cost{0};
     for (const emst::weighted_arch& arch : archs) { // Recorremos el vector con los arcos y fusionamos los que se puedan conectar
       int i{0}, j{0};
       FindIncidentSubTrees_(forest, arch.second, i, j);
       if (i != j) {
         MergeSubTrees_(forest, arch.second, i, j);
+        cost += arch.first;
       }
     }
     emst_ = forest[0].GetArchs(); // El árbol mínimo será el que este en forest
+    cost_ = cost;
   }
 
   /**
@@ -66,7 +70,9 @@ namespace emst {
       for (int j{i + 1}; j < point_set_size; ++j) { // Comprobamos todos los puntos con los que se pueda unir i
         const emst::point& point_j{(*this)[j]}; // Punto j
         const double dist = EuclideanDistance_(std::make_pair(point_i, point_j)); // Calculamos distancia
-        archs.emplace_back(std::make_pair(dist, std::make_pair(point_i, point_j))); // Hacemos el arco entre ambos puntos
+        if (dist >= minimum_distance_) {
+          archs.emplace_back(std::make_pair(dist, std::make_pair(point_i, point_j))); // Hacemos el arco entre ambos puntos
+        }
       }
     }
     std::sort(archs.begin(), archs.end()); // Ordenamos el vector de arcos

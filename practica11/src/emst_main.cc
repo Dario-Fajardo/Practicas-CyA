@@ -39,6 +39,7 @@ int main(int argc, char* argv[]) {
   }
   emst::point_vector points; // Vector con los puntos introducidos
   emst::tree emst; // Futuro árbol mínimo generador
+  double emst_cost; // Futur coste del árbol
   while (true) {
     // Mostrar opciones del menú
     int option;
@@ -61,6 +62,8 @@ int main(int argc, char* argv[]) {
         std::cout << arch;
       }
       std::cout << "\n";
+      std::cout << emst_cost;
+      std::cout << "\n";
     }
     std::cout << "\nOpcion: ";
     std::cin >> option;
@@ -73,7 +76,7 @@ int main(int argc, char* argv[]) {
         break;
       }
       case 1: { // Añadir un punto
-        int x_component, y_component;
+        double x_component, y_component;
         system("clear");
         std::cout << "Componente X: ";
         std::cin >> x_component;
@@ -92,9 +95,10 @@ int main(int argc, char* argv[]) {
         if (points.empty()) {
           break;
         }
-        emst::PointSet point_set{points};
+        emst::PointSet point_set{points, 0};
         point_set.EMST();
         emst = point_set.GetTree();
+        emst_cost = point_set.GetCost();
         if (dot) {
           std::ofstream file{"out.dot"}; // Salida
           std::map<emst::point, char> point_naming;

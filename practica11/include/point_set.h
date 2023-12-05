@@ -20,19 +20,20 @@ namespace emst {
   class PointSet : public emst::point_vector {
    public:
     // Constructores
-    PointSet(const emst::point_vector& points);
+    PointSet(const emst::point_vector& points, const double& minimum_distance);
     // Getters
     inline const emst::tree& GetTree(void) const { return emst_; }
     inline const emst::point_vector& GetPoints(void) const { return *this; }
-    inline const double GetCost(void) const { return ComputeCost_(); }
+    inline const double GetCost(void) const { return cost_; }
     // Otros métodos
     void EMST(void);
    private:
     emst::tree emst_;
+    double cost_;
+    double minimum_distance_;
     void ComputeArchVector_(emst::arch_vector& archs) const;
     void FindIncidentSubTrees_(const emst::forest& sub_tree, const emst::arch &arch, int& i, int& j) const;
     void MergeSubTrees_(emst::forest& sub_tree, const emst::arch& arch, int i, int j) const;
-    double ComputeCost_(void) const;
     double EuclideanDistance_(const emst::arch& arch) const;
   };
 }
