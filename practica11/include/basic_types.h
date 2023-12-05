@@ -22,6 +22,9 @@
 #define MAX_SZ 3
 #define MAX_PREC 1
 
+/**
+ * Typedefs para los tipos de datos que van a ser utilizados con frecuencia en el programa
+ */
 namespace emst {
   typedef std::pair<double, double> point;
   typedef std::vector<point> point_vector;
@@ -32,6 +35,9 @@ namespace emst {
   typedef std::vector<arch> tree;
 }
 
+/**
+ * Operadores necesarios para el funcionamiento del programa 
+ */
 std::ostream& operator<<(std::ostream& output, const emst::point& point);
 std::ostream& operator<<(std::ostream& output, const emst::arch& arch);
 bool operator==(const emst::point& point_a, const emst::point& point_b);

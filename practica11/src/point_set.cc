@@ -13,12 +13,25 @@
 #include "../include/point_set.h"
 
 namespace emst {
+  /**
+   * Constructor de la clase PointSet a partir de un vector con todos los puntos de un conjunto
+   * de puntos
+   * 
+   * @param points: vector con los puntos 
+   */
   PointSet::PointSet(const emst::point_vector& points) {
     for (const point& current_point : points) {
       (*this).emplace_back(current_point);
     }
   }
 
+  /**
+   * Método que calcula el árbol generador mínimo euclidiano de un conjunto de puntos en un espacio
+   * bidimensional, para ello, utiliza un algoritmo greedy similar al de Kruskal, se genera un sub árbol
+   * por cada punto y se van uniendo estos teniendo siempre encuenta de no crear aristas entre puntos de 
+   * un mismo árbol (evitando así los ciclos), al terminar, en el atributo emst_ de la clase PointSet
+   * tendremos un árbol mínimo generador
+   */
   void PointSet::EMST(void) {
     emst::arch_vector archs;
     ComputeArchVector_(archs); // Vector con todos los arcos 
@@ -39,6 +52,12 @@ namespace emst {
     emst_ = forest[0].GetArchs(); // El árbol mínimo será el que este en forest
   }
 
+  /**
+   * Método privado de la clase arch vector que crea un vector con todas las posibles aristas entre los
+   * puntos del espacio bidimensional para ir comprobando si nos sirven o no
+   * 
+   * @param archs: vector el cual se va a modificar para incluir las aristas
+   */
   void PointSet::ComputeArchVector_(emst::arch_vector& archs) const {
     archs.clear();
     const int point_set_size = size(); // Tamaño del PointSet
@@ -53,6 +72,14 @@ namespace emst {
     std::sort(archs.begin(), archs.end()); // Ordenamos el vector de arcos
   }
 
+  /**
+   * Método privado de la clase PointSet que nos permite calcular la distancia euclidea entre dos puntos unidos en un arco
+   * con este método podemos determinar los costes de las aristas sobre las que aplicaremos un algoritmo similar al de kruskal
+   * 
+   * @param arch: arco que une ambos puntos
+   * 
+   * @return el valor de la distancia entre ambos puntos tomando sus componentes
+   */
   double PointSet::EuclideanDistance_(const emst::arch& arch) const {
     double x_component{arch.first.first - arch.second.first}; // Distancia entre las componentes x de los puntos del arco
     double y_component{arch.first.second - arch.second.second}; // Distancia entre las componentes y de los puntos del arco
@@ -62,19 +89,40 @@ namespace emst {
     return distance;
   }
 
-  void PointSet::FindIncidentSubTrees_(const emst::forest& sub_tree, const emst::arch &arch, int& i, int& j) const {
-    for (int k{0}; k < sub_tree.size(); ++k) { // Recorremos los sub-árboles del bosque
-      if (sub_tree[k].Contains(arch.first)) { // Si el k-ésimo árbol contiene el arco, i es igual a k
+  /**
+   * Método privado de la clase PointSet que encuentra a que árboles de un bosque pertenecen ambos puntos de una arista,
+   * posteriormente en el método EMST, vemos si i y j son iguales o no, para saber si la arista entre ambos puntos
+   * es válida para crear el emst
+   * 
+   * @param sub_trees: bosque donde se encuentran los sub_árboles
+   * @param arch: arista que contiene ambos puntos
+   * @param i, j: dos enteros que almacenaran el índice del sub árbol en el vector al que pertenecen el primer punto de
+   *              la arista y el segundo respectivamente, posteriormente estos valores se comparan ya que si son iguales
+   *              significa que la arista uniría puntos de un mismo sub árbol y crearía un ciclo, por lo tanto no nos
+   *              sirve
+   */
+  void PointSet::FindIncidentSubTrees_(const emst::forest& sub_trees, const emst::arch &arch, int& i, int& j) const {
+    for (int k{0}; k < sub_trees.size(); ++k) { // Recorremos los sub-árboles del bosque
+      if (sub_trees[k].Contains(arch.first)) { // Si el k-ésimo árbol contiene el arco, i es igual a k
         i = k;
       }
-      if (sub_tree[k].Contains(arch.second)) { // Si el k-ésimo árbol contiene el arco, j es igual a k
+      if (sub_trees[k].Contains(arch.second)) { // Si el k-ésimo árbol contiene el arco, j es igual a k
         j = k;
       }
     }
   }
 
-  void PointSet::MergeSubTrees_(emst::forest& sub_tree, const emst::arch& arch, int i, int j) const {
-    sub_tree[i].Merge(sub_tree[j], std::make_pair(EuclideanDistance_(arch), arch)); // Unimos ambos arboles mediante el arco arch
-    sub_tree.erase(sub_tree.begin() + j);
+  /**
+   * Método privado de la clase Pointset que usa el método SubTree::Merge para unir dos sub árboles de un bosque
+   * en uno solo en este mismo bosque, para ello en el método EMST, la llamamos cuando creamos un arco que une dos
+   * sub árboles del bosque
+   * 
+   * @param sub_trees: bosque del cual sacaremos los sub árboles
+   * @param arch: arista que une los sub árboles
+   * @param i, j: índices de ambos sub árboles en el vector que representa el bosque (sub_trees)
+   */
+  void PointSet::MergeSubTrees_(emst::forest& sub_trees, const emst::arch& arch, int i, int j) const {
+    sub_trees[i].Merge(sub_trees[j], std::make_pair(EuclideanDistance_(arch), arch)); // Unimos ambos arboles mediante el arco arch
+    sub_trees.erase(sub_trees.begin() + j);
   }
 }

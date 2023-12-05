@@ -27,7 +27,7 @@ void Usage(int argc, char *argv[]) {
     if (argc == 2) {
       std::string parameter{argv[1]};
       if (parameter == "--help" || parameter == "-h") {
-        std::cout << "\nEste programa calcula el árbol generador mínimo euclidiano de un conjunto\n";
+        std::cout << "\nEste programa calcula el árbol generador mínimo euclidiano de un conjunto de puntos\n";
         std::cout << "para ello se han de meter por entrada estándar los puntos de dicho conjunto\n";
         std::cout << "a partir de sus cordenadas (x, y), cuando se ejecuta el programa, este esperara\n";
         std::cout << "por entrada estándar pares de números, por cada uno de ellos de creará un punto\n";
