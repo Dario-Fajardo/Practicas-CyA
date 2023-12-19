@@ -18,11 +18,12 @@
 
 namespace emst {
   typedef std::pair<point, point> line;
+  typedef std::vector<line> line_vector;
 
-  enum side {
+  enum Side {
     LEFT = -1,
-    CENTER,
-    RIGHT
+    CENTER = 0,
+    RIGHT = 1
   };
 
   class PointSet : public emst::point_vector {
@@ -33,7 +34,8 @@ namespace emst {
     inline const emst::tree& GetTree(void) const { return emst_; }
     inline const emst::point_vector& GetPoints(void) const { return *this; }
     inline const double GetCost(void) const { return cost_; }
-    inline const point_vector& GetHull(void) { return hull_; }
+    inline const emst::point_vector& GetHull(void) { return hull_; }
+    inline const emst::line_vector& GetHullLines(void) { return hull_lines_; }
     // Otros métodos
     void EMST(void);
     void QuickHull(void);
@@ -42,6 +44,7 @@ namespace emst {
     double cost_;
     double minimum_distance_;
     emst::point_vector hull_;
+    emst::line_vector hull_lines_;
     // Métodos privados EMST
     void ComputeArchVector_(emst::arch_vector& archs) const;
     void FindIncidentSubTrees_(const emst::forest& sub_tree, const emst::arch &arch, int& i, int& j) const;

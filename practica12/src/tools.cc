@@ -27,13 +27,13 @@ void Usage(int argc, char *argv[]) {
     if (argc == 2) {
       std::string parameter{argv[1]};
       if (parameter == "--help" || parameter == "-h") {
-        std::cout << "\nEste programa calcula el árbol generador mínimo euclidiano de un conjunto de puntos\n";
+        std::cout << "\nEste programa calcula la envoltura convexa de un conjunto de puntos\n";
         std::cout << "para ello se han de meter por entrada estándar los puntos de dicho conjunto\n";
         std::cout << "a partir de sus cordenadas (x, y), cuando se ejecuta el programa, este esperara\n";
         std::cout << "por entrada estándar pares de números, por cada uno de ellos de creará un punto\n";
         std::cout << "un ejemplo sería:\n\n1 1 2.5 4.3 4 5 6 7\n\nEsto crearía los puntos (1, 1), (2.5, 4,3)";
-        std::cout << "(4, 5) y (6, 7) Sobre los que se calculará el árbol generador minimizando la distancia.\n";
-        std::cout << "Cuando el programa calcula el emst, hay dos maneras de obtener el resultado, si no\n";
+        std::cout << "(4, 5) y (6, 7) Sobre los que se calculará la envoltura convexa.\n";
+        std::cout << "Cuando el programa calcula la envoltura, hay dos maneras de obtener el resultado, si no\n";
         std::cout << "se indica nada en ejecución mediante argumentos, se imprimirán las aristas por consola\n";
         std::cout << "de manera normal, en caso de dar la opción -d se creará un archivo .dot para visualizar\n";
         std::cout << "con Graphviz.\n\n";

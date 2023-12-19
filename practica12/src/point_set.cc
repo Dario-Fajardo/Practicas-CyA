@@ -132,29 +132,48 @@ namespace emst {
     sub_trees.erase(sub_trees.begin() + j);
   }
 
+  /**
+   * Función invocante inicial del algoritmo para buscar la envoltura convexa 
+   */
   void PointSet::QuickHull(void) {
     hull_.clear();
-    emst::point min_x_point{0.0, 0.0};
-    emst::point max_x_point{100000.0, 100000.0};
+    emst::point min_x_point{1000000.0, 10000000.0};
+    emst::point max_x_point{0.0, 0.0};
     XBounds_(min_x_point, max_x_point);
-    QuickHull(emst::line{min_x_point, max_x_point}, side::LEFT);
-    QuickHull(emst::line{min_x_point, max_x_point}, side::RIGHT);
+    QuickHull(emst::line{min_x_point, max_x_point}, Side::LEFT);
+    QuickHull(emst::line{min_x_point, max_x_point}, Side::RIGHT);
     // Borrar duplicados
     std::sort(hull_.begin(), hull_.end());
     hull_.erase(std::unique(hull_.begin(), hull_.end()), hull_.end());
   }
 
+  /**
+   * Función recursiva para calcular la envoltura convexa
+   * 
+   * @param line_a: linea a comprobar en la iteración
+   * @param side: lado hacia el que buscar el punto lejano
+   */
   void PointSet::QuickHull(const emst::line& line_a, int side) {
     emst::point farthest;
     if (FarthestPoint_(line_a, side, farthest)) {
-      QuickHull(emst::line{line_a.first, farthest}, -FindSide_(emst::line(line_a.first, farthest), line_a.second));
-      QuickHull(emst::line{farthest, line_a.second}, -FindSide_(emst::line(farthest, line_a.second), line_a.first));
+      QuickHull(emst::line(line_a.first, farthest), -FindSide_(emst::line(line_a.first, farthest), line_a.second));
+      QuickHull(emst::line(farthest, line_a.second), -FindSide_(emst::line(farthest, line_a.second), line_a.first));
     } else {
       hull_.emplace_back(line_a.first);
       hull_.emplace_back(line_a.second);
+      hull_lines_.emplace_back(line_a);
     }
   }
 
+  /**
+   * Función que busca el punto más lejano a una recta teniendo en cuenta uno de sus lados
+   * 
+   * @param line_a: dicha recta
+   * @param side: el lado a mirar codificado en un entero siendo -1 izquierda 0 centro y 1 derecha
+   * @param farthest: valor que contendrá el punto más lejano
+   * 
+   * @return verdadero si se encontro un punto lejano, falso si no
+   */
   bool PointSet::FarthestPoint_(const emst::line& line_a, int side, emst::point& farthest) const {
     farthest = emst::point_vector::at(0);
     double max_dist{0};
@@ -170,16 +189,38 @@ namespace emst {
     return found;
   }
 
+  /**
+   * Distancia desde un punto a una línea
+   * 
+   * @param line_a: dicha línea
+   * @param point_a: dicho punto
+   * 
+   * @return valor de la distancia
+   */
   double PointSet::PointToLine_(const emst::line& line_a, const emst::point& point_a) const {
     const emst::point& point_b{line_a.first};
     const emst::point& point_c{line_a.second};
     return (point_a.second - point_b.second) * (point_c.first - point_b.first) - (point_c.second - point_b.second) * (point_a.first - point_b.first);
   }
 
+  /**
+   * Función para obtener la distancia ABSOLUTA entre una línea y un punto
+   * 
+   * @param line_a: dicha línea
+   * @param point_a: dicho punto
+   * 
+   * @return valor absoluto de la distancia
+   */
   double PointSet::Distance_(const emst::line& line_a, const emst::point& point_a) const {
     return fabs(PointToLine_(line_a, point_a));
   }
 
+  /**
+   * Función usada al principio del QuickHull(void) para obtener los puntos con mayor y menor X
+   * 
+   * @param min_x: punto con mínima X del espacio
+   * @param max_x: punto con máxima X del espacio
+   */
   void PointSet::XBounds_(point& min_x, point& max_x) const {
     for (const emst::point& current_point : *this) {
       if (current_point.first < min_x.first) {
@@ -188,5 +229,27 @@ namespace emst {
         max_x = current_point;
       }
     }
+  }
+
+  /**
+   * Función que calcula hacia que lado de una línea se encuentra un punto en un espacio bidimensional
+   * 
+   * @param line_a: dicha línea
+   * @param point_a: dicho punto
+   * 
+   * @return valor del lado siendo -1 izquierda, 1 derecha y 0 centro
+   */
+  int PointSet::FindSide_(const line& line_a, const point& point_a) const {
+    double slope{line_a.second.second - line_a.first.second / line_a.second.first - line_a.second.second};
+    if (slope > 0 && PointToLine_(line_a, point_a) > 0) {
+      return Side::LEFT;
+    } else if (slope > 0 && PointToLine_(line_a, point_a) < 0) {
+      return Side::RIGHT;
+    } else if (slope < 0 && PointToLine_(line_a, point_a) > 0) {
+      return Side::RIGHT;
+    } else if (slope < 0 && PointToLine_(line_a, point_a) < 0) {
+      return Side::LEFT;
+    }
+    return Side::CENTER;
   }
 }

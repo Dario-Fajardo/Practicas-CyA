@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
   emst::point_vector points; // Vector con los puntos introducidos
   emst::tree emst; // Futuro árbol mínimo generador
   double emst_cost; // Futur coste del árbol
+  emst::point_vector hull;
   while (true) {
     // Mostrar opciones del menú
     int option;
@@ -55,6 +56,7 @@ int main(int argc, char* argv[]) {
     } else {
       std::cout << "[3]: Activar exportacion a archivo DOT\n";
     }
+    std::cout << "[4]: Calcular envoltura convexa\n";
     std::cout << "[0]: Salir del programa\n";
     if (!emst.empty()) {
       std::cout << " \nÚltimo EMST:\n";
@@ -64,6 +66,12 @@ int main(int argc, char* argv[]) {
       std::cout << "\n";
       std::cout << emst_cost;
       std::cout << "\n";
+    }
+    if (!hull.empty()) {
+      std::cout << "\nÚltima envoltura convexa:\n";
+      for (const auto& current_point : hull) {
+        std::cout << "(" << current_point.first << ", " << current_point.second << ")\n";
+      }
     }
     std::cout << "\nOpcion: ";
     std::cin >> option;
@@ -105,19 +113,19 @@ int main(int argc, char* argv[]) {
           file << "graph {\n";
           char point_id{'a'};
           for (const auto& point : point_set.GetPoints()) {
-          point_naming.insert(std::make_pair(point, point_id));
-          file << "  " << point_id << "[pos=\"" << point.first << "," << point.second << "!\"]\n";
-          point_id++;
-        }
-        for (const auto& naming : point_naming) {
-          char origin{naming.second};
-          for (const auto& arch : point_set.GetTree()) {
-            if (arch.first == naming.first) {
-              file << "  " << naming.second << "--" << point_naming[arch.second] << "\n";
+            point_naming.insert(std::make_pair(point, point_id));
+            file << "  " << point_id << "[pos=\"" << point.first << "," << point.second << "!\"]\n";
+            point_id++;
+          }
+          for (const auto& naming : point_naming) {
+            char origin{naming.second};
+            for (const auto& arch : point_set.GetTree()) {
+              if (arch.first == naming.first) {
+                file << "  " << naming.second << "--" << point_naming[arch.second] << "\n";
+              }
             }
           }
-        }
-        file << "}";
+          file << "}";
         } else {
           break;
         }
@@ -129,6 +137,33 @@ int main(int argc, char* argv[]) {
         } else {
           dot = true;
         }
+        break;
+      }
+      case 4: {
+        emst::PointSet point_set{points, 0};
+        point_set.QuickHull();
+        hull.clear();
+        for (const auto& current_point : point_set.GetHull()) {
+          hull.emplace_back(current_point);
+        }
+        if (dot) {
+          std::ofstream file{"out.dot"}; // Salida
+          std::map<emst::point, char> point_naming;
+          file << "graph {\n";
+          char point_id{'a'};
+          for (const auto& point : point_set.GetPoints()) {
+            point_naming.insert(std::make_pair(point, point_id));
+            file << "  " << point_id << "[pos=\"" << point.first << "," << point.second << "!\"]\n";
+            point_id++;
+          }
+          for (const auto& line : point_set.GetHullLines()) {
+            file << "  " << point_naming[line.first] << " -- " << point_naming[line.second] << "\n";
+          }
+          file << "}";
+        } else {
+          break;
+        }
+        break;
       }
     }
     system("clear");
